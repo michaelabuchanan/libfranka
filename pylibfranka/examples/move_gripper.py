@@ -13,12 +13,12 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--ip", type=str, required=True, help="Robot IP address")
-    parser.add_argument("--width", type=float, default=0.005, help="Object width to grasp")
+    parser.add_argument("--width", type=float, default=0.03, help="Object width to grasp") # in meters
     parser.add_argument(
         "--homing", type=int, default=1, choices=[0, 1], help="Perform homing (0 or 1)"
     )
-    parser.add_argument("--speed", type=float, default=0.1, help="Gripper speed")
-    parser.add_argument("--force", type=float, default=60, help="Gripper force")
+    parser.add_argument("--speed", type=float, default=0.1, help="Gripper speed") # in m/s
+    parser.add_argument("--force", type=float, default=1, help="Gripper force") # in N, was originally 60 but that seems like a lot...
     args = parser.parse_args()
 
     try:
