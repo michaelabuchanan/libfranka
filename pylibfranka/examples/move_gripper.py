@@ -46,7 +46,7 @@ def main():
             return -1
 
         # Wait 3s and check afterwards, if the object is still grasped
-        time.sleep(5.0)
+        time.sleep(3.0)
 
         gripper_state = gripper.read_once()
         if not gripper_state.is_grasped:
