@@ -17,7 +17,7 @@ def main():
 
     try:
         print("Sleeping...")
-        sleep(10)
+        time.sleep(10)
 
     except Exception as e:
         print(f"Error occurred: {e}")
