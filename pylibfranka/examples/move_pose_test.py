@@ -42,7 +42,10 @@ def main():
         input("Press Enter to continue...")
 
         q_goal = [0.0, -0.785, 0.0, -2, 0.0, 1.571, 0.785]
-        speed_factor = 0.1                      # dq_max = [2,2,2,2,2.5,2.5,2.5] * speed_factor
+        speed_factor = 0.1  
+        
+        home_motion_generator = MotionGenerator(speed_factor, home_pos)                    
+        # dq_max = [2,2,2,2,2.5,2.5,2.5] * speed_factor
         motion_generator = MotionGenerator(speed_factor, q_goal)
 
         active_control = robot.start_joint_position_control(ControllerMode.JointImpedance)
@@ -60,7 +63,7 @@ def main():
             while not home_finished:
                 robot_state, duration = active_control.readOnce()
 
-                joint_positions = motion_generator(robot_state, duration.to_sec())
+                joint_positions = home_motion_generator(robot_state, duration.to_sec())
                 home_finished = joint_positions.motion_finished
 
                 active_control.writeOnce(joint_positions)
