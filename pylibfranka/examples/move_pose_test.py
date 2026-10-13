@@ -34,28 +34,50 @@ def main():
             upper_force_thresholds,
         )
 
+        home_pos = [0,-0.785,0,-2.356,0,1.571,0.785]
+
         # First move the robot to a suitable joint configuration
         print("WARNING: This example will move the robot!")
         print("Please make sure to have the user stop button at hand!")
         input("Press Enter to continue...")
 
-
-        q_goal = [0.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785]
+        q_goal = [0.0, -0.785, 0.0, -2, 0.0, 1.571, 0.785]
         speed_factor = 0.1                      # dq_max = [2,2,2,2,2.5,2.5,2.5] * speed_factor
         motion_generator = MotionGenerator(speed_factor, q_goal)
 
         active_control = robot.start_joint_position_control(ControllerMode.JointImpedance)
 
-        motion_finished = False
-        while not motion_finished:
-            robot_state, duration = active_control.readOnce()
+        # homing
+        print("Homing...\n")
+        current_pos = robot.read_once()
+        joints = current_pos.q
+        print(joints)
 
-            joint_positions = motion_generator(robot_state, duration.to_sec())
-            motion_finished = joint_positions.motion_finished
+        if joints != home_pos:
+            print("Need to move to home position\n")
+            home_finished = False
 
-            active_control.writeOnce(joint_positions)
+            while not home_finished:
+                robot_state, duration = active_control.readOnce()
 
-        print("\nAll done!\n")
+                joint_positions = motion_generator(robot_state, duration.to_sec())
+                motion_finished = joint_positions.motion_finished
+
+                active_control.writeOnce(joint_positions)
+
+        else:
+            print("Already in home position\n")
+
+        # motion_finished = False
+        # while not motion_finished:
+        #     robot_state, duration = active_control.readOnce()
+
+        #     joint_positions = motion_generator(robot_state, duration.to_sec())
+        #     motion_finished = joint_positions.motion_finished
+
+        #     active_control.writeOnce(joint_positions)
+
+        # print("\nAll done!\n")
 
         # Start joint position control with external control loop
         # active_control = robot.start_joint_position_control(ControllerMode.CartesianImpedance)
