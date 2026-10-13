@@ -73,16 +73,16 @@ def main():
         else:
             print("Already in home position\n")
 
-        # motion_finished = False
-        # while not motion_finished:
-        #     robot_state, duration = active_control.readOnce()
+        motion_finished = False
+        while not motion_finished:
+            robot_state, duration = active_control.readOnce()
 
-        #     joint_positions = motion_generator(robot_state, duration.to_sec())
-        #     motion_finished = joint_positions.motion_finished
+            joint_positions = motion_generator(robot_state, duration.to_sec())
+            motion_finished = joint_positions.motion_finished
 
-        #     active_control.writeOnce(joint_positions)
+            active_control.writeOnce(joint_positions)
 
-        # print("\nAll done!\n")
+        print("\nAll done!\n")
 
         # Start joint position control with external control loop
         # active_control = robot.start_joint_position_control(ControllerMode.CartesianImpedance)
