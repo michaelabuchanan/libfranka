@@ -75,7 +75,9 @@ def main():
 
         motion_finished = False
         while not motion_finished:
+            print("moving robot\n")
             robot_state, duration = active_control.readOnce()
+            print(robot_state.q)
 
             joint_positions = motion_generator(robot_state, duration.to_sec())
             motion_finished = joint_positions.motion_finished
@@ -83,48 +85,6 @@ def main():
             active_control.writeOnce(joint_positions)
 
         print("\nAll done!\n")
-
-        # Start joint position control with external control loop
-        # active_control = robot.start_joint_position_control(ControllerMode.CartesianImpedance)
-
-        # initial_position = [0.0] * 7
-        # time_elapsed = 0.0
-        # motion_finished = False
-
-        # # External control loop
-        # while not motion_finished:
-        #     # Read robot state and duration
-        #     robot_state, duration = active_control.readOnce()
-
-        #     # Update time
-        #     time_elapsed += duration.to_sec()
-
-        #     # On first iteration, capture initial position
-        #     if time_elapsed <= duration.to_sec():
-        #         initial_position = robot_state.q_d if hasattr(robot_state, "q_d") else robot_state.q
-
-        #     # Update joint positions
-        #     new_positions = [
-        #         0,
-        #         -0.785,
-        #         0,
-        #         -2,
-        #         0,
-        #         1.571,
-        #         0.785
-        #     ]
-
-        #     # Set joint positions
-        #     joint_positions = JointPositions(new_positions)
-
-        #     # Set motion_finished flag to True on the last update
-        #     if time_elapsed >= 5.0:
-        #         joint_positions.motion_finished = True
-        #         motion_finished = True
-        #         print("Finished motion, shutting down example")
-
-        #     # Send command to robot
-        #     active_control.writeOnce(joint_positions)
 
     except Exception as e:
         print(f"Error occurred: {e}")
