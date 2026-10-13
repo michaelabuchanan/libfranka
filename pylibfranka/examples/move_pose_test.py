@@ -61,9 +61,11 @@ def main():
                 robot_state, duration = active_control.readOnce()
 
                 joint_positions = motion_generator(robot_state, duration.to_sec())
-                motion_finished = joint_positions.motion_finished
+                home_finished = joint_positions.motion_finished
 
                 active_control.writeOnce(joint_positions)
+
+            print("Done homing\n")
 
         else:
             print("Already in home position\n")
