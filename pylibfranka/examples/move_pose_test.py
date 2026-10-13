@@ -56,26 +56,22 @@ def main():
         joints = current_pos.q
         print(joints)
 
-        if joints != home_pos:
-            print("Need to move to home position\n")
-            home_finished = False
+        home_finished = False
 
-            while not home_finished:
-                robot_state, duration = active_control.readOnce()
+        while not home_finished:
+            robot_state, duration = active_control.readOnce()
 
-                joint_positions = home_motion_generator(robot_state, duration.to_sec())
-                home_finished = joint_positions.motion_finished
+            joint_positions = home_motion_generator(robot_state, duration.to_sec())
+            home_finished = joint_positions.motion_finished
 
-                active_control.writeOnce(joint_positions)
+            active_control.writeOnce(joint_positions)
 
-            print("Done homing\n")
-
-        else:
-            print("Already in home position\n")
+        print("Done homing\n")
 
         motion_finished = False
         while not motion_finished:
             print("moving robot\n")
+            print(robot_state.q)
             robot_state, duration = active_control.readOnce()
             print(robot_state.q)
 
