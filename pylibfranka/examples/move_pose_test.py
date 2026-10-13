@@ -68,6 +68,8 @@ def main():
 
         print("Done homing\n")
 
+        active_control = robot.start_joint_position_control(ControllerMode.JointImpedance)
+
         motion_finished = False
         while not motion_finished:
             print("moving robot\n")
